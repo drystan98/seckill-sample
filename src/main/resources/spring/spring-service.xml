@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+         http://www.springframework.org/schema/beans/spring-beans.xsd
+         http://www.springframework.org/schema/context
+         http://www.springframework.org/schema/context/spring-context.xsd
+         http://www.springframework.org/schema/tx
+         http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+    <!--为什么用IOC
+    1、对象创建统一管理
+    2、规范的生命周期管理
+    3、灵活的依赖注入
+    4、一致的获取对象，默认单例
+    -->
+
+    <!--Spring-IOC注入方式和场景
+    1、xml
+        a:第三方类库，DataSource，
+        b:需要命名空间context,aop,mvc
+    2、注解
+        自身开发使用到的类
+    3、java  config
+        通过代码控制对象创建逻辑的场景
+        自定义修改依赖类库
+    -->
+
+    <!--本项目IOC使用
+        XML配置
+        package-scan
+        Annocation注解
+    -->
+
+    <!--什么是声明式事务
+    1、开启事务
+    2、修改SQL-1，SQL-2，SQL-3....SQL-n
+    3、提交/回滚事务
+    解脱事务代码
+
+    使用方式
+    1、ProxyFactoryBean -> 早期使用方式2.0
+    2、tx:advice+aop命名空间 -> 一次配置永久生效
+    3、注解@Transactoional -> 注解控制（推荐）
+    -->
+
+    <!--事务方法嵌套
+    声明式事务独有的概念
+    传播行为 -> 默认propagation_required ...
+    -->
+
+    <!---什么时候回滚事务
+    抛出运行期异常（RunTimeException）
+    小心不当的try-catch
+    -->
+
+    <!--扫描service包下所有使用注解的类型-->
+    <context:component-scan base-package="org.seckill.service"/>
+
+    <!--配置声明式事务-->
+    <!--配置事务管理器-->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <!--注入数据库的连接池-->
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <!--配置基于注解的声明式事务
+       默认使用注解来管理事务行为
+    -->
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+
+</beans>
+
